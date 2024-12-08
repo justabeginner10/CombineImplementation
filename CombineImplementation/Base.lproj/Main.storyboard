@@ -27,12 +27,26 @@
                                     <action selector="didTapOnUIKitButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="YUI-8O-MN8"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ayq-bO-WAV">
+                                <rect key="frame" x="159" y="426" width="78.666666666666686" height="35"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="35" id="e9Z-c4-buD"/>
+                                </constraints>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="SwiftUI"/>
+                                <connections>
+                                    <action selector="didTapOnSwiftUIButton" destination="BYZ-38-t0r" eventType="touchUpInside" id="AFM-Qt-skG"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="lgn-q7-wJl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="159" id="2vI-Kj-E0a"/>
+                            <constraint firstItem="ayq-bO-WAV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="159" id="H8d-kI-ASJ"/>
+                            <constraint firstItem="ayq-bO-WAV" firstAttribute="top" secondItem="lgn-q7-wJl" secondAttribute="bottom" constant="100" id="aVf-uw-uP6"/>
                             <constraint firstItem="lgn-q7-wJl" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="188" id="f8Z-Jx-Ey7"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="ayq-bO-WAV" secondAttribute="trailing" constant="155.33000000000001" id="fIA-cf-zDc"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="lgn-q7-wJl" secondAttribute="trailing" constant="159" id="wsU-xI-aVL"/>
                         </constraints>
                     </view>

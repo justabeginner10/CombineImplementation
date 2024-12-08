@@ -19,8 +19,17 @@ class ViewController: UIViewController {
         self.navigationController?.pushViewController(destination, animated: true)
     }
 
+    private func moveToSwiftUIController() {
+        let destination = SUMoviesViewController()
+        self.navigationController?.pushViewController(destination, animated: true)
+    }
+    
     @IBAction private func didTapOnUIKitButton() {
         self.moveToUIKitController()
+    }
+    
+    @IBAction private func didTapOnSwiftUIButton() {
+        self.moveToSwiftUIController()
     }
 }
 

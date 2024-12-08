@@ -8,11 +8,29 @@
 import SwiftUI
 
 struct SUMoviesView: View {
+    @StateObject var viewModel: SUMoviesViewModel
+    @State private var search: String = ""
+    init(viewModel: SUMoviesViewModel) {
+        _viewModel = StateObject(wrappedValue: viewModel)
+    }
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack {
+            List(self.viewModel.movies) { movies in
+                HStack {
+                    Text("\(movies.title)")
+                }
+            }
+            .searchable(text: $search)
+            .onChange(of: search) {
+                viewModel.sendSearchSubject(search: search)
+            }
+        }
     }
 }
 
 #Preview {
-    SUMoviesView()
+    NavigationStack {
+        SUMoviesView(viewModel: SUMoviesViewModel(httpClient: SUHTTPClient()))
+    }
 }

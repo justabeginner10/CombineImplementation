@@ -12,6 +12,7 @@ enum NetworkError: Error {
     case badUrl
 }
 
+
 class HTTPClient {
     
     func fetchMovie(search: String, page: Int = 1) -> AnyPublisher<[Movies], Error> {
@@ -33,6 +34,30 @@ class HTTPClient {
     }
     
 }
+
+class SUHTTPClient {
+    
+    func fetchMovie(search: String, page: Int = 1) -> AnyPublisher<[SUMovies], Error> {
+        guard let encodedSearch = search.urlEncoded,
+              let url = URL(string: "https://www.omdbapi.com/?s=\(encodedSearch)&apikey=[Your API Key]&page=\(page)")
+        else {
+            return Fail(error: NetworkError.badUrl).eraseToAnyPublisher()
+        }
+              
+        return URLSession.shared.dataTaskPublisher(for: url)
+            .map(\.data)
+            .decode(type: SUMoviesData.self, decoder: JSONDecoder())
+            .map(\.search)
+            .receive(on: DispatchQueue.main)
+            .catch { error -> AnyPublisher<[SUMovies], Error> in
+                return Just([]).setFailureType(to: Error.self).eraseToAnyPublisher()
+            }
+            .eraseToAnyPublisher()
+    }
+    
+}
+
+
 
 extension String {
     var urlEncoded: String? {

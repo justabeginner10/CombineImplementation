@@ -56,7 +56,6 @@ class MoviesViewController: UIViewController {
     
     private func setupUI() {
         self.view.backgroundColor = .white
-        self.navigationController?.navigationItem.hidesBackButton = true
         
         self.view.addSubview(self.tableView)
         self.view.addSubview(self.searchField)
