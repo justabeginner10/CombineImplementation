@@ -15,7 +15,7 @@ class ViewController: UIViewController {
     }
 
     private func moveToUIKitController() {
-        let destination = MoviesViewController()
+        let destination = MoviesViewController(viewModel: MoviesViewModel(httpClient: HTTPClient()))
         self.navigationController?.pushViewController(destination, animated: true)
     }
 

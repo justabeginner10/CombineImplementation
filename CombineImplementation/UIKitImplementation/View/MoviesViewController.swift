@@ -10,6 +10,10 @@ import Combine
 
 class MoviesViewController: UIViewController {
 
+    private var viewModel: MoviesViewModel
+    
+    private var cancellable: Set<AnyCancellable> = []
+    
     lazy private var tableView: UITableView! = {
         let tableView = UITableView()
         tableView.delegate = self
@@ -18,14 +22,16 @@ class MoviesViewController: UIViewController {
         return tableView
     }()
     
-    lazy private var searchField: UISearchTextField! = {
-        let searchField = UISearchTextField()
+    lazy private var searchField: UISearchBar! = {
+        let searchField = UISearchBar()
+        searchField.placeholder = "Search Movies"
         searchField.delegate = self
         searchField.translatesAutoresizingMaskIntoConstraints = false
         return searchField
     }()
     
-    init() {
+    init(viewModel: MoviesViewModel) {
+        self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -38,6 +44,14 @@ class MoviesViewController: UIViewController {
         
         self.setupUI()
         self.registerCell()
+        
+        viewModel.$loadingComplete
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] completed in
+                if completed {
+                    self?.tableView.reloadData()
+                }
+            }.store(in: &cancellable)
     }
     
     private func setupUI() {
@@ -49,8 +63,8 @@ class MoviesViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             searchField.topAnchor.constraint(equalTo: self.view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            searchField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor, constant: 16),
-            searchField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor, constant: -16),
+            searchField.leadingAnchor.constraint(equalTo: self.view.leadingAnchor),
+            searchField.trailingAnchor.constraint(equalTo: self.view.trailingAnchor),
             searchField.heightAnchor.constraint(equalToConstant: 50)
         ])
         
@@ -69,7 +83,7 @@ class MoviesViewController: UIViewController {
 
 extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        return viewModel.movies.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -77,11 +91,13 @@ extension MoviesViewController: UITableViewDelegate, UITableViewDataSource {
             withIdentifier: MoviesTableViewCell.identifier,
             for: indexPath
         ) as? MoviesTableViewCell else { return UITableViewCell() }
-        cell.configureCell(with: "\(indexPath.row) row")
+        cell.configureCell(with: viewModel.movies[indexPath.row].title)
         return cell
     }
 }
 
-extension MoviesViewController: UITextFieldDelegate {
-    
+extension MoviesViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        viewModel.sendSearchEvent(with: searchText)
+    }
 }
